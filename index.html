@@ -199,28 +199,115 @@
             { n: 10, title: "Proyecto Pac-Man (Parte 3)", description: "Daremos los toques finales: vidas, pantalla de 'Game Over' y sonidos. ¡Presentación de proyectos!" }
         ];
 
-        // -------- CONTENIDO EXTENDIDO DE GUÍA PEDAGÓGICA POR CLASE --------
         const guiaPedagogica = {
             1: {
                 objetivos: "Familiarizarse con la interfaz de Scratch. Entender los conceptos de sprite, escenario y secuencia. Crear una animación simple.",
                 conceptos: "Interfaz, Sprites, Escenario, Bloques de Eventos, Bloques de Movimiento, Secuencia.",
                 desarrollo: {
-                    inicio: "Bienvenida. Preguntar: ¿Qué es programar? ¿Alguien ha usado Scratch?",
-                    introduccion: "Recorrido guiado por la interfaz de Scratch: paleta de bloques, área de programación, escenario y panel de sprites.",
-                    practica: "Actividad 'Anima tu nombre': Borrar el gato, añadir letras como sprites y programarlas.",
-                    desafio: "Añadir sonidos a las letras. Hacer que reaccionen al hacer clic.",
-                    cierre: "Resumen de lo aprendido. Adelanto de la próxima clase."
+                    inicio: "Bienvenida y sondeo de conocimientos previos.",
+                    introduccion: "Recorrido guiado por la interfaz de Scratch.",
+                    practica: "Actividad 'Anima tu nombre' usando sprites de letras.",
+                    desafio: "Añadir sonidos y reacciones al clic en las letras.",
+                    cierre: "Resumen y adelanto de la próxima clase sobre movimiento."
                 }
             },
             2: {
-                objetivos: "Controlar un sprite con las teclas del teclado. Entender las coordenadas (X, Y).",
+                objetivos: "Controlar un sprite con el teclado. Entender las coordenadas (X, Y).",
                 conceptos: "Evento 'al presionar tecla', Coordenadas (X, Y), Bloques de dirección.",
                 desarrollo: {
-                    inicio: "Repaso: ¿Qué es un sprite? ¿Qué es un evento? Mostrar los proyectos anteriores.",
-                    introduccion: "Explicar el escenario como un plano cartesiano. Mostrar bloques que afectan la posición.",
-                    practica: "Actividad 'Controla al gato': Crear secuencias para cada flecha del teclado.",
-                    desafio: "Dibujar un laberinto y guiar al gato sin tocar las paredes.",
-                    cierre: "¿Qué fue lo más difícil? Adelanto: contaremos una historia."
+                    inicio: "Repaso de la clase anterior y muestra de proyectos.",
+                    introduccion: "Explicación del plano cartesiano del escenario.",
+                    practica: "Actividad 'Controla al gato' con las flechas del teclado.",
+                    desafio: "Crear y navegar un laberinto simple sin tocar paredes.",
+                    cierre: "Reflexión y adelanto sobre cómo contar historias."
+                }
+            },
+            3: {
+                objetivos: "Usar bloques de apariencia y sonido. Cambiar disfraces para crear animaciones.",
+                conceptos: "Bloques `decir` y `pensar`, `cambiar disfraz`, `tocar sonido`.",
+                desarrollo: {
+                    inicio: "Repaso del control por teclado.",
+                    introduccion: "Exploración de las pestañas 'Disfraces' y 'Sonidos'.",
+                    practica: "Crear una conversación entre dos sprites usando diálogos y esperas.",
+                    desafio: "Animar la conversación con movimiento y cambios de disfraces.",
+                    cierre: "Introducción al concepto de repetición y bucles."
+                }
+            },
+            4: {
+                objetivos: "Entender y usar bucles (`por siempre`, `repetir`) para optimizar código.",
+                conceptos: "Bucles, eficiencia, extensión 'Lápiz' para dibujar.",
+                desarrollo: {
+                    inicio: "Plantear el problema de acciones repetitivas.",
+                    introduccion: "Explicar el funcionamiento de los bucles.",
+                    practica: "Hacer que un personaje se mueva de lado a lado de forma continua.",
+                    desafio: "Crear patrones y figuras geométricas usando el Lápiz y bucles.",
+                    cierre: "Adelanto sobre la toma de decisiones con condicionales."
+                }
+            },
+            5: {
+                objetivos: "Implementar lógica condicional para que los programas tomen decisiones.",
+                conceptos: "Bloque `si... entonces`, operadores lógicos y de comparación.",
+                desarrollo: {
+                    inicio: "Plantear un problema: ¿cómo hacer que algo pase solo a veces?",
+                    introduccion: "Explicar la estructura de una condición.",
+                    practica: "Hacer que un sprite reaccione al tocar un borde de la pantalla.",
+                    desafio: "Crear un juego simple de 'esquivar objetos' que caen.",
+                    cierre: "Introducción a los sensores para detectar interacciones."
+                }
+            },
+            6: {
+                objetivos: "Usar sensores para crear interacción entre sprites y con el entorno.",
+                conceptos: "Sensores `¿tocando...?`, `distancia a...`, `color tocando...`.",
+                desarrollo: {
+                    inicio: "Repaso de condicionales.",
+                    introduccion: "Exploración de la paleta de bloques de Sensores.",
+                    practica: "Crear un juego de 'pilla-pilla' donde un sprite persigue a otro.",
+                    desafio: "Mejorar el juego con diferentes velocidades o efectos al ser atrapado.",
+                    cierre: "Adelanto sobre cómo guardar información como los puntos."
+                }
+            },
+            7: {
+                objetivos: "Almacenar y modificar datos usando variables.",
+                conceptos: "Creación, inicialización y modificación de `Variables`.",
+                desarrollo: {
+                    inicio: "Preguntar: ¿cómo guardaríamos una puntuación en un juego?",
+                    introduccion: "Explicar el concepto de variable como una 'caja' para datos.",
+                    practica: "Crear un juego de 'clicker' que sume puntos en una variable.",
+                    desafio: "Añadir una cuenta regresiva usando otra variable.",
+                    cierre: "Presentación del gran proyecto final: Pac-Man."
+                }
+            },
+            8: {
+                objetivos: "Diseñar el escenario (laberinto) y programar el movimiento del personaje principal.",
+                conceptos: "Combinación de movimiento, condicionales y sensor de color.",
+                desarrollo: {
+                    inicio: "Presentación y planificación del proyecto Pac-Man.",
+                    introduccion: "Definir los componentes: personaje, paredes, puntos, enemigos.",
+                    practica: "Dibujar el laberinto y programar el movimiento de Pac-Man.",
+                    desafio: "Implementar la colisión para que no atraviese las paredes.",
+                    cierre: "Adelanto sobre cómo añadir los puntos y los fantasmas."
+                }
+            },
+            9: {
+                objetivos: "Añadir enemigos con movimiento básico y objetos coleccionables.",
+                conceptos: "Uso de `clones` para objetos múltiples, variables para puntuación.",
+                desarrollo: {
+                    inicio: "Repaso y prueba del movimiento de Pac-Man en el laberinto.",
+                    introduccion: "Explicar cómo usar clones para crear todas las bolitas de una vez.",
+                    practica: "Crear las bolitas, programar la suma de puntos y añadir un fantasma.",
+                    desafio: "Añadir un segundo fantasma con un patrón de movimiento diferente.",
+                    cierre: "Adelanto sobre el sistema de vidas y el fin del juego."
+                }
+            },
+            10: {
+                objetivos: "Finalizar el juego con un sistema de vidas, 'Game Over' y sonidos.",
+                conceptos: "Lógica de juego completa, `enviar` y `recibir` mensajes.",
+                desarrollo: {
+                    inicio: "Probar el estado actual del juego.",
+                    introduccion: "Explicar cómo manejar la colisión con fantasmas y las vidas.",
+                    practica: "Programar la variable `Vidas` y la pantalla de 'Game Over'.",
+                    desafio: "Añadir efectos de sonido y personalizar el juego.",
+                    cierre: "¡Presentación de proyectos finales y cierre del taller!"
                 }
             }
         };
@@ -246,7 +333,6 @@
                 </div>
             `;
         }
-
 
         document.addEventListener('DOMContentLoaded', () => {
             const conceptsGrid = document.getElementById('concepts-grid');
