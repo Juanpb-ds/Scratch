@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taller Interactivo de Scratch</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Dracula Light -->
+    <!-- Application Structure Plan: He diseñado una aplicación de una sola página con desplazamiento vertical y una barra de navegación fija. La estructura es: 1) Encabezado, 2) Conceptos Clave Interactivos, 3) Cronograma del Curso, 4) Gráfico de Progresión y 5) Showcase del Proyecto Final. Esta arquitectura transforma un programa lineal en una experiencia explorable, permitiendo al usuario saltar a cualquier sección de interés. Se eligió este modelo para fomentar la curiosidad y el descubrimiento, haciendo el contenido más digerible y atractivo que un documento estático, especialmente para el público objetivo (jóvenes estudiantes y sus padres). -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Tabla de conceptos clave -> Goal: Informar/Educar -> Viz: Tarjetas interactivas con íconos y animaciones CSS -> Interaction: Click para revelar descripción -> Justification: Mucho más atractivo y memorable que una tabla. Fomenta la interacción directa con cada concepto. -> Library/Method: Vanilla JS, HTML/CSS.
+        - Report Info: Lista de 10 clases -> Goal: Organizar/Mostrar cambio -> Viz: Línea de tiempo vertical interactiva -> Interaction: Click en cada clase para resaltar y ver detalles -> Justification: Visualiza el flujo y la progresión del curso de manera clara y secuencial. -> Library/Method: HTML/CSS, Vanilla JS.
+        - Report Info: Temas de las clases -> Goal: Analizar/Comparar -> Viz: Gráfico de barras apiladas (Chart.js) -> Interaction: Tooltips al pasar el mouse -> Justification: Proporciona una visión cuantitativa de cómo se construyen los conocimientos, mostrando qué conceptos se introducen y refuerzan en cada etapa del curso. -> Library/Method: Chart.js/Canvas.
+        - Report Info: Proyecto Final Pac-Man -> Goal: Inspirar/Informar -> Viz: Sección destacada con texto e íconos -> Interaction: Ninguna, es una sección informativa -> Justification: Cierra el recorrido mostrando la meta final de forma atractiva. -> Library/Method: HTML/CSS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #495057;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 450px;
+            max-height: 50vh;
+        }
+        .concept-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .concept-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        .timeline-item-content {
+            transition: all 0.3s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        .timeline-item.active .timeline-item-content {
+            max-height: 500px;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #6a63f6;
+            transform-origin: bottom right;
+            transition: transform 0.3s ease-out;
+        }
+        .nav-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-xl font-bold text-gray-800">
+                <span class="text-[#6a63f6]">Scratch</span> Taller
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#concepts" class="nav-link text-gray-600 hover:text-[#6a63f6]">Conceptos</a>
+                <a href="#timeline" class="nav-link text-gray-600 hover:text-[#6a63f6]">Cronograma</a>
+                <a href="#progress" class="nav-link text-gray-600 hover:text-[#6a63f6]">Progreso</a>
+                <a href="#project" class="nav-link text-gray-600 hover:text-[#6a63f6]">Proyecto Final</a>
+            </div>
+            <div class="md:hidden">
+                <button id="menu-btn" class="text-gray-600 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden">
+            <a href="#concepts" class="block py-2 px-4 text-sm hover:bg-gray-200">Conceptos</a>
+            <a href="#timeline" class="block py-2 px-4 text-sm hover:bg-gray-200">Cronograma</a>
+            <a href="#progress" class="block py-2 px-4 text-sm hover:bg-gray-200">Progreso</a>
+            <a href="#project" class="block py-2 px-4 text-sm hover:bg-gray-200">Proyecto Final</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="py-20 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-gray-800 mb-4 leading-tight">Crea tus Propios Videojuegos con <span class="text-[#6a63f6]">Scratch</span></h1>
+                <p class="text-lg md:text-xl text-gray-600 mb-8 max-w-3xl mx-auto">Un taller de 10 clases para jóvenes de 12 a 13 años donde aprenderás a programar tus propias animaciones y juegos, desde la idea inicial hasta un proyecto completo como Pac-Man.</p>
+                <a href="#concepts" class="bg-[#6a63f6] text-white font-bold py-3 px-8 rounded-full hover:bg-[#5851d8] transition-colors duration-300">¡Comienza a Explorar!</a>
+            </div>
+        </section>
+
+        <!-- Concepts Section -->
+        <section id="concepts" class="py-16">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Conceptos Clave de la Programación</h2>
+                    <p class="text-md text-gray-600 mt-2 max-w-2xl mx-auto">Programar es como aprender un nuevo idioma para hablar con las computadoras. En Scratch, lo hacemos con bloques visuales. Haz clic en cada tarjeta para descubrir los conceptos fundamentales.</p>
+                </div>
+                <div id="concepts-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section id="timeline" class="py-16 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Nuestro Recorrido de Aprendizaje</h2>
+                    <p class="text-md text-gray-600 mt-2 max-w-2xl mx-auto">Este es el plan de 10 clases que te llevará de cero a creador de videojuegos. Haz clic en cada clase para ver los detalles.</p>
+                </div>
+                <div id="timeline-container" class="relative max-w-4xl mx-auto">
+                     <div class="absolute left-1/2 -translate-x-1/2 h-full w-1 bg-gray-200 rounded-full"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress Chart Section -->
+        <section id="progress" class="py-16">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Progresión de Habilidades</h2>
+                    <p class="text-md text-gray-600 mt-2 max-w-2xl mx-auto">Este gráfico muestra cómo iremos introduciendo y combinando los diferentes conceptos a lo largo del taller. Verás cómo cada clase construye sobre la anterior, preparándote para el proyecto final.</p>
+                </div>
+                <div class="bg-white p-4 sm:p-8 rounded-xl shadow-lg">
+                    <div class="chart-container">
+                        <canvas id="progressChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Project Section -->
+        <section id="project" class="py-20 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Proyecto Final: PAC-MAN en Scratch</h2>
+                <p class="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">Al final del taller, aplicarás todo lo aprendido para crear tu propia versión del legendario Pac-Man, integrando movimiento, detección de colisiones, variables para puntos y vidas, y mucho más.</p>
+                <div class="flex justify-center items-center space-x-6 text-2xl font-bold text-[#6a63f6]">
+                     <span>🕹️</span>
+                     <span class="text-gray-400">+</span>
+                     <span>🧠</span>
+                     <span class="text-gray-400">+</span>
+                     <span>💡</span>
+                     <span class="text-gray-400">=</span>
+                     <span class="text-4xl">🏆</span>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 Taller de Programación con Scratch. Un recurso para futuros creadores.</p>
+        </div>
+    </footer>
+
+    <script>
+        const conceptsData = [
+            { title: 'Algoritmo', icon: '📝', description: 'Una serie de pasos ordenados para resolver un problema o completar una tarea. Es tu "plan" o "receta".' },
+            { title: 'Sprite', icon: '😺', description: 'Son los personajes u objetos que puedes programar en tu proyecto. Cada uno tiene sus propios bloques de código.' },
+            { title: 'Escenario', icon: '🏞️', description: 'Es el fondo de tu proyecto. También puedes programarlo para que cambie o reaccione a eventos.' },
+            { title: 'Evento', icon: '⚡', description: 'La acción que inicia un programa o una secuencia de bloques. Es el "cuándo" suceden las cosas (ej: al presionar la bandera verde).' },
+            { title: 'Bucle', icon: '🔄', description: 'Permite repetir un conjunto de acciones varias veces, ya sea un número determinado de veces o para siempre.' },
+            { title: 'Condicional', icon: '❓', description: 'Permite que el programa tome decisiones. "Si pasa esto, haz aquello". Evalúa si una condición es verdadera o falsa.' },
+            { title: 'Variable', icon: '📦', description: 'Es como una caja donde puedes guardar información que puede cambiar, como una puntuación, vidas o tiempo.' },
+            { title: 'Coordenadas', icon: '📍', description: 'El escenario es un plano con ejes X (horizontal) e Y (vertical) que nos permiten ubicar a los sprites con precisión.' }
+        ];
+
+        const timelineData = [
+            { n: 1, title: "¡Hola, Mundo!", description: "Introducción a la programación y a la interfaz de Scratch. Crearemos nuestra primera animación." },
+            { n: 2, title: "¡En Movimiento!", description: "Exploraremos los bloques de movimiento y los eventos para controlar a nuestros personajes con el teclado." },
+            { n: 3, title: "¡Contando una Historia!", description: "Usaremos bloques de apariencia y sonido para crear diálogos y escenas animadas." },
+            { n: 4, title: "El Poder de la Repetición", description: "Descubriremos los bucles para crear patrones, dibujos geométricos y acciones continuas." },
+            { n: 5, title: "Tomando Decisiones", description: "Aprenderemos a usar condicionales (si... entonces) para que nuestros programas reaccionen a lo que sucede." },
+            { n: 6, title: "Juegos Interactivos", description: "Usaremos los sensores para que los sprites interactúen entre sí y con el puntero del ratón." },
+            { n: 7, title: "¡A Contar Puntos!", description: "Crearemos nuestras primeras variables para llevar el marcador en un juego." },
+            { n: 8, title: "Proyecto Pac-Man (Parte 1)", description: "Diseñaremos el laberinto y programaremos el movimiento de nuestro héroe." },
+            { n: 9, title: "Proyecto Pac-Man (Parte 2)", description: "Añadiremos los fantasmas, las bolitas para comer y el sistema de puntos." },
+            { n: 10, title: "Proyecto Pac-Man (Parte 3)", description: "Daremos los toques finales: vidas, pantalla de 'Game Over' y sonidos. ¡Presentación de proyectos!" }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const conceptsGrid = document.getElementById('concepts-grid');
+            conceptsData.forEach(concept => {
+                const card = document.createElement('div');
+                card.className = 'concept-card bg-white p-6 rounded-xl shadow-md cursor-pointer';
+                card.innerHTML = `
+                    <div class="flex items-center mb-4">
+                        <span class="text-4xl mr-4">${concept.icon}</span>
+                        <h3 class="text-xl font-bold text-gray-800">${concept.title}</h3>
+                    </div>
+                    <div class="description text-gray-600 text-sm" style="display: none;">${concept.description}</div>
+                `;
+                conceptsGrid.appendChild(card);
+            });
+            
+            conceptsGrid.addEventListener('click', (e) => {
+                const card = e.target.closest('.concept-card');
+                if (card) {
+                    const description = card.querySelector('.description');
+                    description.style.display = description.style.display === 'none' ? 'block' : 'none';
+                }
+            });
+
+            const timelineContainer = document.getElementById('timeline-container');
+            timelineData.forEach((item, index) => {
+                const isLeft = index % 2 === 0;
+                const itemDiv = document.createElement('div');
+                itemDiv.className = `timeline-item mb-8 flex justify-between items-center w-full ${isLeft ? '' : 'flex-row-reverse'}`;
+                itemDiv.innerHTML = `
+                    <div class="order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-[#6a63f6] shadow-xl w-12 h-12 rounded-full">
+                        <h1 class="mx-auto font-bold text-lg text-white">${item.n}</h1>
+                    </div>
+                    <div class="order-1 bg-white rounded-lg shadow-xl w-5/12 px-6 py-4 cursor-pointer">
+                        <h3 class="font-bold text-gray-800 text-lg">${item.title}</h3>
+                        <div class="timeline-item-content">
+                            <p class="text-sm leading-snug tracking-wide text-gray-600">${item.description}</p>
+                        </div>
+                    </div>
+                `;
+                timelineContainer.appendChild(itemDiv);
+            });
+            
+            timelineContainer.addEventListener('click', (e) => {
+                const header = e.target.closest('.order-1.bg-white');
+                if (header) {
+                    const parentItem = header.closest('.timeline-item');
+                    document.querySelectorAll('.timeline-item').forEach(item => {
+                        if (item !== parentItem && item.classList.contains('active')) {
+                            item.classList.remove('active');
+                        }
+                    });
+                    parentItem.classList.toggle('active');
+                }
+            });
+
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            const ctx = document.getElementById('progressChart').getContext('2d');
+            const chartData = {
+                labels: timelineData.map(item => `Clase ${item.n}`),
+                datasets: [
+                    { label: 'Conceptos Básicos', data: [2, 1, 2, 0, 0, 0, 0, 0, 0, 0], backgroundColor: '#8BE9FD' },
+                    { label: 'Movimiento y Eventos', data: [1, 2, 0, 0, 0, 0, 0, 1, 0, 0], backgroundColor: '#50FA7B' },
+                    { label: 'Apariencia y Sonido', data: [0, 0, 2, 0, 0, 0, 0, 1, 0, 1], backgroundColor: '#F1E85B' },
+                    { label: 'Bucles y Lógica', data: [0, 0, 0, 2, 2, 1, 0, 1, 1, 1], backgroundColor: '#FFB86C' },
+                    { label: 'Sensores y Variables', data: [0, 0, 0, 0, 1, 2, 2, 1, 2, 2], backgroundColor: '#FF79C6' },
+                ]
+            };
+            new Chart(ctx, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: { display: false },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                    },
+                    scales: {
+                        x: { stacked: true },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Nivel de Complejidad / Conceptos Nuevos'
+                            }
+                        }
+                    },
+                }
+            });
+        });
+    </script>
+</body>
+</html>
