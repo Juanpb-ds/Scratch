@@ -4,8 +4,164 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taller Interactivo de Scratch</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com">
+// -------- CONTENIDO EXTENDIDO DE GUÍA PEDAGÓGICA POR CLASE --------
+const guiaPedagogica = {
+    1: {
+        objetivos: "Familiarizarse con la interfaz de Scratch. Entender los conceptos de sprite, escenario y secuencia. Crear una animación simple.",
+        conceptos: "Interfaz, Sprites, Escenario, Bloques de Eventos, Bloques de Movimiento, Secuencia.",
+        desarrollo: {
+            inicio: "Bienvenida. Preguntar: ¿Qué es programar? ¿Alguien ha usado Scratch?",
+            introduccion: "Recorrido guiado por la interfaz de Scratch: paleta de bloques, área de programación, escenario y panel de sprites.",
+            practica: "Actividad 'Anima tu nombre': Borrar el gato, añadir letras como sprites y programarlas.",
+            desafio: "Añadir sonidos a las letras. Hacer que reaccionen al hacer clic.",
+            cierre: "Resumen de lo aprendido. Adelanto de la próxima clase."
+        }
+    },
+    2: {
+        objetivos: "Controlar un sprite con las teclas del teclado. Entender las coordenadas (X, Y).",
+        conceptos: "Evento 'al presionar tecla', Coordenadas (X, Y), Bloques de dirección.",
+        desarrollo: {
+            inicio: "Repaso: ¿Qué es un sprite? ¿Qué es un evento? Mostrar los proyectos anteriores.",
+            introduccion: "Explicar el escenario como un plano cartesiano. Mostrar bloques que afectan la posición.",
+            practica: "Actividad 'Controla al gato': Crear secuencias para cada flecha del teclado.",
+            desafio: "Dibujar un laberinto y guiar al gato sin tocar las paredes.",
+            cierre: "¿Qué fue lo más difícil? Adelanto: contaremos una historia."
+        }
+    }
+};
+
+function crearGuiaHTML(clase) {
+    const guia = guiaPedagogica[clase];
+    if (!guia) return "";
+
+    return `
+        <div class="bg-gray-50 p-4 rounded-xl mt-4 shadow-inner text-left text-sm space-y-2">
+            <p><strong>🎯 Objetivos:</strong> ${guia.objetivos}</p>
+            <p><strong>🧠 Conceptos Clave:</strong> ${guia.conceptos}</p>
+            <div class="space-y-1">
+                <p><strong>📚 Desarrollo:</strong></p>
+                <ul class="list-disc list-inside">
+                    <li><strong>Inicio:</strong> ${guia.desarrollo.inicio}</li>
+                    <li><strong>Introducción:</strong> ${guia.desarrollo.introduccion}</li>
+                    <li><strong>Práctica Guiada:</strong> ${guia.desarrollo.practica}</li>
+                    <li><strong>Desafío:</strong> ${guia.desarrollo.desafio}</li>
+                    <li><strong>Cierre:</strong> ${guia.desarrollo.cierre}</li>
+                </ul>
+            </div>
+        </div>
+    `;
+}
+
+// Ampliar comportamiento del timeline para mostrar guía pedagógica
+timelineContainer.addEventListener('click', (e) => {
+    const header = e.target.closest('.order-1.bg-white');
+    if (header) {
+        const parentItem = header.closest('.timeline-item');
+        document.querySelectorAll('.timeline-item').forEach(item => {
+            if (item !== parentItem && item.classList.contains('active')) {
+                item.classList.remove('active');
+                const guiaExtra = item.querySelector('.guia-extra');
+                if (guiaExtra) guiaExtra.remove();
+            }
+        });
+        parentItem.classList.toggle('active');
+
+        const claseN = parseInt(parentItem.querySelector('h1').textContent.trim());
+        if (parentItem.classList.contains('active') && guiaPedagogica[claseN]) {
+            const content = parentItem.querySelector('.timeline-item-content');
+            const guiaHTML = crearGuiaHTML(claseN);
+            const guiaContainer = document.createElement('div');
+            guiaContainer.className = "guia-extra";
+            guiaContainer.innerHTML = guiaHTML;
+            content.appendChild(guiaContainer);
+        } else {
+            const guiaExtra = parentItem.querySelector('.guia-extra');
+            if (guiaExtra) guiaExtra.remove();
+        }
+    }
+});
+</script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js">
+// -------- CONTENIDO EXTENDIDO DE GUÍA PEDAGÓGICA POR CLASE --------
+const guiaPedagogica = {
+    1: {
+        objetivos: "Familiarizarse con la interfaz de Scratch. Entender los conceptos de sprite, escenario y secuencia. Crear una animación simple.",
+        conceptos: "Interfaz, Sprites, Escenario, Bloques de Eventos, Bloques de Movimiento, Secuencia.",
+        desarrollo: {
+            inicio: "Bienvenida. Preguntar: ¿Qué es programar? ¿Alguien ha usado Scratch?",
+            introduccion: "Recorrido guiado por la interfaz de Scratch: paleta de bloques, área de programación, escenario y panel de sprites.",
+            practica: "Actividad 'Anima tu nombre': Borrar el gato, añadir letras como sprites y programarlas.",
+            desafio: "Añadir sonidos a las letras. Hacer que reaccionen al hacer clic.",
+            cierre: "Resumen de lo aprendido. Adelanto de la próxima clase."
+        }
+    },
+    2: {
+        objetivos: "Controlar un sprite con las teclas del teclado. Entender las coordenadas (X, Y).",
+        conceptos: "Evento 'al presionar tecla', Coordenadas (X, Y), Bloques de dirección.",
+        desarrollo: {
+            inicio: "Repaso: ¿Qué es un sprite? ¿Qué es un evento? Mostrar los proyectos anteriores.",
+            introduccion: "Explicar el escenario como un plano cartesiano. Mostrar bloques que afectan la posición.",
+            practica: "Actividad 'Controla al gato': Crear secuencias para cada flecha del teclado.",
+            desafio: "Dibujar un laberinto y guiar al gato sin tocar las paredes.",
+            cierre: "¿Qué fue lo más difícil? Adelanto: contaremos una historia."
+        }
+    }
+};
+
+function crearGuiaHTML(clase) {
+    const guia = guiaPedagogica[clase];
+    if (!guia) return "";
+
+    return `
+        <div class="bg-gray-50 p-4 rounded-xl mt-4 shadow-inner text-left text-sm space-y-2">
+            <p><strong>🎯 Objetivos:</strong> ${guia.objetivos}</p>
+            <p><strong>🧠 Conceptos Clave:</strong> ${guia.conceptos}</p>
+            <div class="space-y-1">
+                <p><strong>📚 Desarrollo:</strong></p>
+                <ul class="list-disc list-inside">
+                    <li><strong>Inicio:</strong> ${guia.desarrollo.inicio}</li>
+                    <li><strong>Introducción:</strong> ${guia.desarrollo.introduccion}</li>
+                    <li><strong>Práctica Guiada:</strong> ${guia.desarrollo.practica}</li>
+                    <li><strong>Desafío:</strong> ${guia.desarrollo.desafio}</li>
+                    <li><strong>Cierre:</strong> ${guia.desarrollo.cierre}</li>
+                </ul>
+            </div>
+        </div>
+    `;
+}
+
+// Ampliar comportamiento del timeline para mostrar guía pedagógica
+timelineContainer.addEventListener('click', (e) => {
+    const header = e.target.closest('.order-1.bg-white');
+    if (header) {
+        const parentItem = header.closest('.timeline-item');
+        document.querySelectorAll('.timeline-item').forEach(item => {
+            if (item !== parentItem && item.classList.contains('active')) {
+                item.classList.remove('active');
+                const guiaExtra = item.querySelector('.guia-extra');
+                if (guiaExtra) guiaExtra.remove();
+            }
+        });
+        parentItem.classList.toggle('active');
+
+        const claseN = parseInt(parentItem.querySelector('h1').textContent.trim());
+        if (parentItem.classList.contains('active') && guiaPedagogica[claseN]) {
+            const content = parentItem.querySelector('.timeline-item-content');
+            const guiaHTML = crearGuiaHTML(claseN);
+            const guiaContainer = document.createElement('div');
+            guiaContainer.className = "guia-extra";
+            guiaContainer.innerHTML = guiaHTML;
+            content.appendChild(guiaContainer);
+        } else {
+            const guiaExtra = parentItem.querySelector('.guia-extra');
+            if (guiaExtra) guiaExtra.remove();
+        }
+    }
+});
+</script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -304,6 +460,84 @@
                 }
             });
         });
-    </script>
+    
+// -------- CONTENIDO EXTENDIDO DE GUÍA PEDAGÓGICA POR CLASE --------
+const guiaPedagogica = {
+    1: {
+        objetivos: "Familiarizarse con la interfaz de Scratch. Entender los conceptos de sprite, escenario y secuencia. Crear una animación simple.",
+        conceptos: "Interfaz, Sprites, Escenario, Bloques de Eventos, Bloques de Movimiento, Secuencia.",
+        desarrollo: {
+            inicio: "Bienvenida. Preguntar: ¿Qué es programar? ¿Alguien ha usado Scratch?",
+            introduccion: "Recorrido guiado por la interfaz de Scratch: paleta de bloques, área de programación, escenario y panel de sprites.",
+            practica: "Actividad 'Anima tu nombre': Borrar el gato, añadir letras como sprites y programarlas.",
+            desafio: "Añadir sonidos a las letras. Hacer que reaccionen al hacer clic.",
+            cierre: "Resumen de lo aprendido. Adelanto de la próxima clase."
+        }
+    },
+    2: {
+        objetivos: "Controlar un sprite con las teclas del teclado. Entender las coordenadas (X, Y).",
+        conceptos: "Evento 'al presionar tecla', Coordenadas (X, Y), Bloques de dirección.",
+        desarrollo: {
+            inicio: "Repaso: ¿Qué es un sprite? ¿Qué es un evento? Mostrar los proyectos anteriores.",
+            introduccion: "Explicar el escenario como un plano cartesiano. Mostrar bloques que afectan la posición.",
+            practica: "Actividad 'Controla al gato': Crear secuencias para cada flecha del teclado.",
+            desafio: "Dibujar un laberinto y guiar al gato sin tocar las paredes.",
+            cierre: "¿Qué fue lo más difícil? Adelanto: contaremos una historia."
+        }
+    }
+};
+
+function crearGuiaHTML(clase) {
+    const guia = guiaPedagogica[clase];
+    if (!guia) return "";
+
+    return `
+        <div class="bg-gray-50 p-4 rounded-xl mt-4 shadow-inner text-left text-sm space-y-2">
+            <p><strong>🎯 Objetivos:</strong> ${guia.objetivos}</p>
+            <p><strong>🧠 Conceptos Clave:</strong> ${guia.conceptos}</p>
+            <div class="space-y-1">
+                <p><strong>📚 Desarrollo:</strong></p>
+                <ul class="list-disc list-inside">
+                    <li><strong>Inicio:</strong> ${guia.desarrollo.inicio}</li>
+                    <li><strong>Introducción:</strong> ${guia.desarrollo.introduccion}</li>
+                    <li><strong>Práctica Guiada:</strong> ${guia.desarrollo.practica}</li>
+                    <li><strong>Desafío:</strong> ${guia.desarrollo.desafio}</li>
+                    <li><strong>Cierre:</strong> ${guia.desarrollo.cierre}</li>
+                </ul>
+            </div>
+        </div>
+    `;
+}
+
+// Ampliar comportamiento del timeline para mostrar guía pedagógica
+timelineContainer.addEventListener('click', (e) => {
+    const header = e.target.closest('.order-1.bg-white');
+    if (header) {
+        const parentItem = header.closest('.timeline-item');
+        document.querySelectorAll('.timeline-item').forEach(item => {
+            if (item !== parentItem && item.classList.contains('active')) {
+                item.classList.remove('active');
+                const guiaExtra = item.querySelector('.guia-extra');
+                if (guiaExtra) guiaExtra.remove();
+            }
+        });
+        parentItem.classList.toggle('active');
+
+        const claseN = parseInt(parentItem.querySelector('h1').textContent.trim());
+        if (parentItem.classList.contains('active') && guiaPedagogica[claseN]) {
+            const content = parentItem.querySelector('.timeline-item-content');
+            const guiaHTML = crearGuiaHTML(claseN);
+            const guiaContainer = document.createElement('div');
+            guiaContainer.className = "guia-extra";
+            guiaContainer.innerHTML = guiaHTML;
+            content.appendChild(guiaContainer);
+        } else {
+            const guiaExtra = parentItem.querySelector('.guia-extra');
+            if (guiaExtra) guiaExtra.remove();
+        }
+    }
+});
+</script>
+
 </body>
 </html>
